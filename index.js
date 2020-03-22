@@ -98,14 +98,15 @@ Fritz.prototype = {
     getDeviceListInfos: function() {
         return this.call(module.exports.getDeviceListInfos);
     },
-    
-    //new functions related to templates in version 7
+
     getTemplateListInfos : function() {
         return this.call(module.exports.getTemplateListInfos);
     },
+
     getTemplateList : function() {
         return this.call(module.exports.getTemplateList);
     },
+
     applyTemplate: function(ain) {
         return this.call(module.exports.applyTemplate, ain);
     },
@@ -202,6 +203,11 @@ Fritz.prototype = {
     setGuestWlan: function(enable) {
         return this.call(module.exports.setGuestWlan, enable);
     },
+    
+    getPhoneList: function() {
+        return executeCommand(this.sid, null, null, null, "/fon_num/foncalls_list.lua?csv=");
+    },
+
 
     /*
      * Helper functions
@@ -415,7 +421,7 @@ module.exports.applyTemplate = function(sid, ain, options)
 };
 
 // get basic device info (XML)
-module.exports.getBasicDeviceStats  = function(sid, options)
+module.exports.getBasicDeviceStats  = function(sid, ain, options)
 {
     return executeCommand(sid, 'getbasicdevicestats', ain, options);
 };
