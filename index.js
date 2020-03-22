@@ -208,6 +208,30 @@ Fritz.prototype = {
         return executeCommand(this.sid, null, null, null, "/fon_num/foncalls_list.lua?csv=");
     },
 
+    //new
+    getColorDefaults: function() {
+        return this.call(module.exports.getColorDefaults);
+    },
+
+    setSimpleOn: function(ain) {
+        return this.call(module.exports.setSimpleOn, ain);
+    },
+
+    setSimpleOff: function(ain) {
+        return this.call(module.exports.setSimpleOff, ain);
+    },
+
+    setLevel: function(ain, level) {
+        return this.call(module.exports.setLevel, ain, level);
+    },
+    
+    setColorTemperature: function(ain, temp) {
+        return this.call(module.exports.setColorTemperature, ain, temp);
+    },
+    
+    setColor: function(ain, typ, value) {
+        return this.call(module.exports.setColor, ain, typ, value);
+    },
 
     /*
      * Helper functions
@@ -618,6 +642,61 @@ module.exports.getTempComfort = function(sid, ain, options)
         return api2temp(body);
     });
 };
+
+//new
+// get color defaults (XML)
+module.exports.getColorDefaults = function(sid, options)
+{
+    return executeCommand(sid, 'getcolordefaults', null, options);
+};
+
+/ turn an device on. returns the state the outlet was set to
+module.exports.setSimpleOn = function(sid, ain, options)
+{
+    return executeCommand(sid, 'setsimpleonoff&onoff:1', ain, options).then(function(body) {
+        // api does not return a value
+        return 'OK'; // true if on
+    });
+};
+
+// turn an device off. returns the state the outlet was set to
+module.exports.setSimpleOff = function(sid, ain, options)
+{
+    return executeCommand(sid, 'setsimpleonoff&onoff:0', ain, options).then(function(body) {
+        // api does not return a value
+        return 'OK';
+    });
+};
+
+// set level (dimmer etc.)
+module.exports.setLevel = function(sid, ain, level, options)
+{
+    return executeCommand(sid, 'setlevel&level=' + level, ain, options).then(function(body) {
+        // api does not return a value
+        return temp;
+    });
+};
+
+// set color temperature
+module.exports.setColorTemperature = function(sid, ain, temp, options)
+{
+    return executeCommand(sid, 'setcolortemperature&temperature=' + temp + '&duration=0', ain, options).then(function(body) {
+        // api does not return a value
+        return temp;
+    });
+};
+
+// set color hue or saturation
+module.exports.setColor = function(sid, ain, typ, value, options)
+{
+    return executeCommand(sid, 'setcolor&'+ typ +'=' + value+ '&duration=0', ain, options).then(function(body) {
+        // api does not return a value
+        return value;
+    });
+};
+
+
+
 
 // get battery charge - not part of Fritz API
 module.exports.getBatteryCharge = function(sid, ain, options)
